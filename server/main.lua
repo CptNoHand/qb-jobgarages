@@ -1,13 +1,12 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
-TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
+-- TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
 
 local OutsideVehicles = {}
 
 -- code
 
-RegisterServerEvent('qb-garages:server:UpdateOutsideVehicles')
-AddEventHandler('qb-garages:server:UpdateOutsideVehicles', function(Vehicles)
+RegisterServerEvent('qb-garages:server:UpdateOutsideVehicles', function(Vehicles)
     local src = source
     local Ply = QBCore.Functions.GetPlayer(src)
     local CitizenId = Ply.PlayerData.citizenid
@@ -78,8 +77,7 @@ QBCore.Functions.CreateCallback("qb-garage:server:GetDepotVehicles", function(so
         end)
 end)
 
-RegisterServerEvent('qb-garage:server:updateVehicleStatus')
-AddEventHandler('qb-garage:server:updateVehicleStatus', function(fuel, engine, body, plate, garage)
+RegisterServerEvent('qb-garage:server:updateVehicleStatus', function(fuel, engine, body, plate, garage)
     local src = source
     local pData = QBCore.Functions.GetPlayer(src)
 

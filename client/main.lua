@@ -1,8 +1,8 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
-Citizen.CreateThread(function() 
+Citizen.CreateThread(function()
     while QBCore == nil do
-        TriggerEvent("QBCore:GetObject", function(obj) QBCore = obj end)    
+        TriggerEvent("QBCore:GetObject", function(obj) QBCore = obj end)
         Citizen.Wait(200)
     end
 end)
@@ -10,29 +10,18 @@ end)
 local hasGarageKey = nil
 local currentGarage = nil
 local OutsideVehicles = {}
-
-isLoggedIn = false
 local PlayerJob = {}
 
 
-RegisterNetEvent('QBCore:Client:OnPlayerLoaded')
-AddEventHandler('QBCore:Client:OnPlayerLoaded', function()
-    isLoggedIn = true
+RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
     PlayerJob = QBCore.Functions.GetPlayerData().job
 end)
 
-RegisterNetEvent('QBCore:Client:OnPlayerUnload')
-AddEventHandler('QBCore:Client:OnPlayerUnload', function()
-    isLoggedIn = false
-end)
-
-RegisterNetEvent('QBCore:Client:OnJobUpdate')
-AddEventHandler('QBCore:Client:OnJobUpdate', function(JobInfo)
+RegisterNetEvent('QBCore:Client:OnJobUpdate', function(JobInfo)
     PlayerJob = JobInfo
 end)
 
-RegisterNetEvent('qb-garages:client:takeOutDepot')
-AddEventHandler('qb-garages:client:takeOutDepot', function(vehicle)
+RegisterNetEvent('qb-garages:client:takeOutDepot', function(vehicle)
     if OutsideVehicles ~= nil and next(OutsideVehicles) ~= nil then
         if OutsideVehicles[vehicle.plate] ~= nil then
             local Engine = GetVehicleEngineHealth(OutsideVehicles[vehicle.plate])
@@ -310,7 +299,7 @@ Citizen.CreateThread(function()
 
         for k, v in pairs(Garages) do
             local takeDist = #(pos - vector3(Garages[k].takeVehicle.x, Garages[k].takeVehicle.y, Garages[k].takeVehicle.z))
-            if PlayerJob.name == Config.DealershipJobName then
+            if PlayerJob.name == Garages[k].job then
                 if takeDist <= 15 then
                     inGarageRange = true
                     DrawMarker(2, Garages[k].takeVehicle.x, Garages[k].takeVehicle.y, Garages[k].takeVehicle.z, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3, 0.2, 0.15, 200, 0, 0, 222, false, false, false, true, false, false, false)
@@ -360,7 +349,7 @@ Citizen.CreateThread(function()
                                 CheckPlayers(curVeh)
                                 TriggerServerEvent('qb-garage:server:updateVehicleStatus', totalFuel, engineDamage, bodyDamage, plate, k)
                                 TriggerServerEvent('qb-garage:server:updateVehicleState', 1, plate, k)
-                              
+
                                 if plate ~= nil then
                                     OutsideVehicles[plate] = veh
                                     TriggerServerEvent('qb-garages:server:UpdateOutsideVehicles', OutsideVehicles)
@@ -382,7 +371,7 @@ Citizen.CreateThread(function()
 end)
 
 function CheckPlayers(vehicle)
-    for i = -1, 5,1 do                
+    for i = -1, 5,1 do
         seat = GetPedInVehicleSeat(vehicle,i)
         if seat ~= 0 then
             TaskLeaveVehicle(seat,vehicle,0)
